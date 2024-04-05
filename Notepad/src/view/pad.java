@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controller.myController;
+import model.myModel;
+
 import javax.swing.JTextArea;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
@@ -23,6 +27,7 @@ public class pad extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private myModel model;
 
 	/**
 	 * Launch the application.
@@ -44,6 +49,7 @@ public class pad extends JFrame {
 	 * Create the frame.
 	 */
 	public pad() {
+		this.model = new myModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -61,40 +67,41 @@ public class pad extends JFrame {
 		contentPane.add(menuBar);
 
 		JButton btnNewButton = new JButton("Open");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser();
+		btnNewButton.addActionListener(		
+				(e)->{
+					JFileChooser fc = new JFileChooser();
 
-				int returnVal = fc.showOpenDialog(btnNewButton);
+					int returnVal = fc.showOpenDialog(btnNewButton);
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
-
-					textArea.setText(readFile(file.getAbsolutePath()));
-				} else {
-					System.out.println("Open command cancelled by user. \n");
-				}
-			}
-		});
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						File file = fc.getSelectedFile();
+						model.setFileName(file.getAbsolutePath());
+						textArea.setText(readFile(model.getFileName()));
+					} else {
+						System.out.println("Open command cancelled by user. \n");
+					}
+				}	
+		);
 		menuBar.add(btnNewButton);
 
 		JButton btnNewButton_1 = new JButton("Save");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String content = textArea.getText();
-				JFileChooser fc = new JFileChooser();
+		btnNewButton_1.addActionListener(
+				(e)->{
+					model.setContent(textArea.getText());
+					JFileChooser fc = new JFileChooser();
 
-				int returnVal = fc.showSaveDialog(btnNewButton_1);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
+					int returnVal = fc.showSaveDialog(btnNewButton_1);
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						File file = fc.getSelectedFile();
 
-					writeFile(file.getAbsolutePath(), content);
-				} else {
-					System.out.println("Save command cancelled by user. \n");
+						writeFile(file.getAbsolutePath(), model.getContent());
+					} else {
+						System.out.println("Save command cancelled by user. \n");
+					}
 				}
-			}
-		});
+		);
 		menuBar.add(btnNewButton_1);
+		this.setVisible(true);
 	}
 
 	public static String readFile(String name) {

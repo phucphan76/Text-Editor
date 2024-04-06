@@ -1,12 +1,14 @@
 package model;
 
+import java.util.ArrayList;
+
 public class myModel {
 	private String content;
 	private String fileName;
 	
 	public myModel() {
-		this.content = "";
-		this.fileName = "";
+		content = "";
+		fileName = "";
 	}
 	
 	public String getContent() {
